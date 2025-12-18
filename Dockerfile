@@ -5,7 +5,7 @@ USER root
 # Install Python + pip
 RUN apk add --no-cache python3 py3-pip
 
-# Install PDF library (test library)
-RUN pip3 install --no-cache-dir pdfplumber
+# Allow pip to install into system python (PEP 668 override)
+RUN pip3 install --no-cache-dir --break-system-packages pdfplumber
 
 USER node
