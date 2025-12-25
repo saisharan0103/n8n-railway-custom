@@ -1,19 +1,15 @@
-# n8n latest stable
 FROM docker.n8n.io/n8nio/n8n:latest
 
 USER root
 
-# ---- System deps ----
-RUN apk add --no-cache \
-  python3 \
-  py3-pip \
-  bash
+# Install system deps (Debian)
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    bash \
+    && rm -rf /var/lib/apt/lists/*
 
-# ---- Install pdfplumber globally ----
+# Install pdfplumber
 RUN pip3 install --no-cache-dir pdfplumber
-
-# ---- FIX: create writable directory for n8n binary export ----
-RUN mkdir -p /data/tmp \
-  && chown -R node:node /data
 
 USER node
