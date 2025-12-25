@@ -1,20 +1,19 @@
-# n8n stable (recommended)
-FROM docker.n8n.io/n8nio/n8n:2.0.2
+# n8n latest stable
+FROM docker.n8n.io/n8nio/n8n:latest
 
 USER root
 
-# ---- System deps (Alpine) ----
+# ---- System deps ----
 RUN apk add --no-cache \
   python3 \
-  py3-virtualenv \
+  py3-pip \
   bash
 
-# ---- Create a venv and install pdf libs into it ----
-RUN python3 -m venv /opt/venv \
-  && /opt/venv/bin/pip install --upgrade pip \
-  && /opt/venv/bin/pip install --no-cache-dir pdfplumber
+# ---- Install pdfplumber globally ----
+RUN pip3 install --no-cache-dir pdfplumber
 
-# Make the venv Python + pip available everywhere (including Execute Command node)
-ENV PATH="/opt/venv/bin:${PATH}"
+# ---- FIX: create writable directory for n8n binary export ----
+RUN mkdir -p /data/tmp \
+  && chown -R node:node /data
 
 USER node
