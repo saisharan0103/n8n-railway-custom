@@ -1,13 +1,12 @@
-FROM docker.n8n.io/n8nio/n8n:latest
+FROM docker.n8n.io/n8nio/n8n:alpine
 
 USER root
 
-# Install system deps (Debian)
-RUN apt-get update && apt-get install -y \
+# Install Python + pip
+RUN apk add --no-cache \
     python3 \
-    python3-pip \
-    bash \
-    && rm -rf /var/lib/apt/lists/*
+    py3-pip \
+    bash
 
 # Install pdfplumber
 RUN pip3 install --no-cache-dir pdfplumber
